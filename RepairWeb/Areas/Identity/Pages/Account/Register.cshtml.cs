@@ -14,22 +14,23 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RepairWeb.Authorization;
+using RepairWeb.Data;
 
 namespace RepairWeb.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
         public IEnumerable<string> Roles { get; }
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserStore<ApplicationUser> _userStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            IUserStore<ApplicationUser> userStore,
+            SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
@@ -86,7 +87,7 @@ namespace RepairWeb.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser() { UserName = Input.Name, Email = Input.Login};
+                var user = new ApplicationUser() { UserName = Input.Login, FullName = Input.Name};
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -114,7 +115,7 @@ namespace RepairWeb.Areas.Identity.Pages.Account
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<ApplicationUser>();
             }
             catch
             {
@@ -124,7 +125,7 @@ namespace RepairWeb.Areas.Identity.Pages.Account
             }
         }
 
-        private async Task AddClaims(IdentityUser user)
+        private async Task AddClaims(ApplicationUser user)
         {
             var roleClaim = new Claim(Claims.UserRole, Input.Role);
             await _userManager.AddClaimAsync(user, roleClaim);
