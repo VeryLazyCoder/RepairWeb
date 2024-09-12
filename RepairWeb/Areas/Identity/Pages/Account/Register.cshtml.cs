@@ -58,7 +58,7 @@ namespace RepairWeb.Areas.Identity.Pages.Account
             [Display(Name = "Password")]
             public string Password { get; set; }
 
-            
+
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
@@ -69,7 +69,7 @@ namespace RepairWeb.Areas.Identity.Pages.Account
             public string Name { get; set; }
 
             [Required]
-            [Display (Name = "Role")]
+            [Display(Name = "Role")]
             public string Role { get; set; }
         }
 
@@ -86,18 +86,19 @@ namespace RepairWeb.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser(){UserName = Input.Name};
+                var user = new IdentityUser() { UserName = Input.Name, Email = Input.Login};
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
+                    await AddClaims(user);
                     _logger.LogInformation("User created a new account with password.");
 
-                    
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
 
-                       
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return LocalRedirect(returnUrl);
+
+
                 }
                 foreach (var error in result.Errors)
                 {

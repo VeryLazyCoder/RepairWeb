@@ -25,6 +25,8 @@ namespace RepairWeb
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddRazorPages();
+            builder.Services.Configure<IdentityOptions>(options => options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ ");
 
             var app = builder.Build();
 
