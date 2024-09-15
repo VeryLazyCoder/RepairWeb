@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RepairWeb.Authorization;
 
 namespace RepairWeb.Pages
 {
@@ -12,9 +13,20 @@ namespace RepairWeb.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if (User.Identity.IsAuthenticated)
+                return RedirectToPageByClaim();
 
+            return Page();
+        }
+
+        private IActionResult RedirectToPageByClaim()
+        {
+            if (User.HasClaim(Claims.UserRole, "исполнитель"))
+                return RedirectToPage("Executor");
+
+            return RedirectToPage("Client");
         }
     }
 }

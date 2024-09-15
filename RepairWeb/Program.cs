@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using RepairWeb.Authorization;
 using RepairWeb.Data;
 
 namespace RepairWeb
@@ -26,6 +27,14 @@ namespace RepairWeb
             builder.Services.AddRazorPages();
             builder.Services.Configure<IdentityOptions>(options => options.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ ");
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(Policies.IsClient,
+                    policyBuilder => policyBuilder.RequireClaim(Claims.UserRole, "клиент"));
+                options.AddPolicy(Policies.IsExecutor,
+                    policyBuilder => policyBuilder.RequireClaim(Claims.UserRole, "исполнитель"));
+            });
 
             var app = builder.Build();
 
