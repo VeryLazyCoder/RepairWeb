@@ -34,6 +34,8 @@ namespace RepairWeb
                     policyBuilder => policyBuilder.RequireClaim(Claims.UserRole, "клиент"));
                 options.AddPolicy(Policies.IsExecutor,
                     policyBuilder => policyBuilder.RequireClaim(Claims.UserRole, "исполнитель"));
+                options.AddPolicy(Policies.IsAdmin, policyBuilder => policyBuilder.RequireClaim(
+                    Claims.UserRole, "admin"));
             });
 
             var app = builder.Build();

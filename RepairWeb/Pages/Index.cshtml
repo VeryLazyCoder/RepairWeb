@@ -7,4 +7,10 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Для работы с приложением необходисо зарегистрироваться.</p>
+    @{
+        if (Model.IsUserAdminCandidate)
+        {
+            <p>Подождите пока ваша заявка будет обработана</p>
+        }
+    }
 </div>

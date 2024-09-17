@@ -39,7 +39,7 @@ namespace RepairWeb.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            Roles = new List<string>() { "клиент", "исполнитель" };
+            Roles = new List<string>() { "клиент", "исполнитель", "подать заявку в администраторы" };
         }
 
         [BindProperty]
@@ -87,7 +87,7 @@ namespace RepairWeb.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser() { UserName = Input.Login, FullName = Input.Name};
+                var user = new ApplicationUser() { UserName = Input.Login, FullName = Input.Name };
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -127,8 +127,13 @@ namespace RepairWeb.Areas.Identity.Pages.Account
 
         private async Task AddClaims(ApplicationUser user)
         {
-            var roleClaim = new Claim(Claims.UserRole, Input.Role);
-            await _userManager.AddClaimAsync(user, roleClaim);
+            if (Input.Role == Roles.ToList()[2])
+                await _userManager.AddClaimAsync(user, new Claim(Claims.AdminCandidate, ""));
+            else
+            {
+                var roleClaim = new Claim(Claims.UserRole, Input.Role);
+                await _userManager.AddClaimAsync(user, roleClaim);
+            }
         }
     }
 }

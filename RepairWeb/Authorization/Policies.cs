@@ -4,5 +4,6 @@
     {
         public const string IsClient = "IsClient";
         public const string IsExecutor = "IsExecutor";
+        public const string IsAdmin = "IsAdmin";
     }
 }

@@ -6,6 +6,7 @@ namespace RepairWeb.Pages
 {
     public class IndexModel : PageModel
     {
+        public bool IsUserAdminCandidate;
         private readonly ILogger<IndexModel> _logger;
 
         public IndexModel(ILogger<IndexModel> logger)
@@ -25,8 +26,15 @@ namespace RepairWeb.Pages
         {
             if (User.HasClaim(Claims.UserRole, "исполнитель"))
                 return RedirectToPage("Executor");
+            if (User.HasClaim(Claims.UserRole, "клиент"))
+                return RedirectToPage("Client");
+            if (User.HasClaim(c => c.Type == Claims.AdminCandidate))
+            {
+                IsUserAdminCandidate = true;
+                return Page();
+            }
 
-            return RedirectToPage("Client");
+            return RedirectToPage("Admin");
         }
     }
 }
