@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RepairWeb.Authorization;
 
-namespace RepairWeb.Pages
+namespace RepairWeb.Pages.Repair
 {
-    [Authorize(Policies.IsExecutor)]
-    public class ExecutorModel : PageModel
+    [Authorize(Policies.IsClient)]
+    public class ClientModel : PageModel
     {
         public void OnGet()
         {

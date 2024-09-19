@@ -1,0 +1,38 @@
+﻿@page
+@model RepairWeb.Pages.Repair.AdminModel
+@{
+    <h1>Это страница менеджера</h1>
+    <p>Список изъявивших желание стать манагером</p>
+    <table class="table table-striped" id="ingredients">
+        <thead>
+        <tr>
+            <th>Login</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+            @{
+                for (int i = 0; i < Model.Candidates.Count; i++)
+                {
+                    var candidate = Model.Candidates[i];
+                    <tr>
+                        <td>@candidate.UserName</td>
+                        <td>@candidate.FullName</td>
+                        <td>
+
+                            @{
+                                var i1 = i;
+                            }
+                            <form method="post">
+                                <input type="hidden" name="CandidateId" value="@candidate.Id" />
+                                <button type="submit" asp-page-handler="Promote" class="btn btn-success">Назначить менеджером</button>
+                                <button type="submit" asp-page-handler="Reject" class="btn btn-danger">Отказать</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
