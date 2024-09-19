@@ -1,5 +1,34 @@
 ﻿@page
 @model RepairWeb.Pages.Client.CreateModel
 @{
-
+    <p>Для создания заявки заполните следующую форму</p>
+    <form method="post" class="form-horizontal">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Input.Equipment" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Input.Equipment" class="form-control" />
+                <span asp-validation-for="Input.Equipment" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Input.ProblemDescription" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <textarea asp-for="Input.ProblemDescription" class="form-control"></textarea>
+                <span asp-validation-for="Input.ProblemDescription" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Input.SerialNumber" class="col-md-2 control-label"></label>
+            <div class="col-md-15">
+                <input asp-for="Input.SerialNumber" class="form-control" />
+                <span asp-validation-for="Input.SerialNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-primary">Создать</button>
+            </div>
+        </div>
+    </form>
 }
