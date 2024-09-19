@@ -2,6 +2,34 @@
 @model RepairWeb.Pages.Repair.ClientModel
 @{
     <h1>Это страница клиента</h1>
-
+    @if (!Model.Requests.Any())
+    {
+        <p>У вас нет заявок, можете создать новую, когда что-нибудь сломается</p>
+    }
+    else
+    {
+        <p>Здесь собраны все ваши заявки</p>
+        <div class="table-responsive">
+            <table class="table table-striped recipe">
+                <thead>
+                <tr>
+                    <th>Оборудование</th>
+                    <th>Статус</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var request in Model.Requests)
+                {
+                    <tr>
+                        <td class="align-middle">@request.Equipment</td>
+                        <td class="align-middle">@request.Status</td>
+                        <td class="align-middle"><a asp-page="/Client/View" asp-route-id="@request.Id" class="btn btn-primary">Детали</a></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
     <a asp-page="/Client/Create" class="btn btn-primary">Создать заявку</a>
 }

@@ -13,7 +13,7 @@ namespace RepairWeb.Data.Services
             _context = context;
         }
 
-        public async Task<List<RequestSummaryViewModel>> GetRequests(ApplicationUser user)
+        public async Task<List<RequestSummaryViewModel>> GetRequestsSummary(ApplicationUser user)
         {
             return await _context.Requests.Where(r => r.ClientId == user.Id)
                 .Select(x => new RequestSummaryViewModel(x.Id, x.Equipment, x.Status))

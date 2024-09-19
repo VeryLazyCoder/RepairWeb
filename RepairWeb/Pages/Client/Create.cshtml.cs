@@ -28,14 +28,15 @@ namespace RepairWeb.Pages.Client
             Input = new CreatingRequestViewModel();
         }
 
-        public async Task<IActionResult> OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
+
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);
                 Input.ClientId = user.Id;
                 await _requestService.CreateRequest(Input);
-                return RedirectToPage("Repair/Client");
+                return RedirectToPage("/Repair/Client");
             }
 
             return Page();

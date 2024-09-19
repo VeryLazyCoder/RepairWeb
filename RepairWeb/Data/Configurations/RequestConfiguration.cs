@@ -15,6 +15,7 @@ namespace RepairWeb.Data.Configurations
             builder.Property(r => r.ProblemDescription).IsRequired();
             builder.Property(r => r.SerialNumber).IsRequired();
             builder.Property(r => r.ExecutorId).IsRequired(false);
+            builder.Property(r => r.ExecutorComment).IsRequired(false);
         }
     }
 }

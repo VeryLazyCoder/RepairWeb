@@ -5,7 +5,7 @@ namespace RepairWeb.Data.Models
 {
     public record CreatingRequestViewModel
     {
-        public string ClientId { get; set; }
+        public string? ClientId { get; set; }
         [Required]
         [Display(Name = "Неисправное оборудование")]
         public string Equipment { get; set; }
