@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RepairWeb.Authorization;
 using RepairWeb.Data;
+using RepairWeb.Data.Services;
 
 namespace RepairWeb
 {
@@ -16,6 +17,7 @@ namespace RepairWeb
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            builder.Services.AddScoped<RequestService>();
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
                 {
