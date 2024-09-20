@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using RepairWeb.Data.Entities;
 using RepairWeb.Data.Models;
 
@@ -7,10 +8,12 @@ namespace RepairWeb.Data.Services
     public class RequestService
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RequestService(ApplicationDbContext context)
+        public RequestService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<List<RequestSummaryViewModel>> GetRequestsSummary(ApplicationUser user)
@@ -35,6 +38,27 @@ namespace RepairWeb.Data.Services
 
             await _context.SaveChangesAsync();
             return request.Id.ToString();
+        }
+
+        public async Task<ClientRequestViewModel> GetRequest(string id)
+        {
+            var request = await _context.Requests.Where(x => x.Id.ToString() == id)
+                    .SingleOrDefaultAsync();
+            if (request == default)
+                return null;
+            var executorName = request.ExecutorId == default ? "мастер ещё не назначен" :
+                    _userManager.FindByIdAsync(request.ExecutorId.ToString()).Result.FullName;
+            return new ClientRequestViewModel
+            {
+                SerialNumber = request.SerialNumber,
+                Status = request.Status,
+                Equipment = request.Equipment,
+                ProblemDescription = request.ProblemDescription,
+                RequestId = id,
+                ExecutorComment = request.ExecutorComment ?? "мастер не оставил никаких комментариев",
+                ExecutorName = executorName
+            };
+
         }
     }
 }

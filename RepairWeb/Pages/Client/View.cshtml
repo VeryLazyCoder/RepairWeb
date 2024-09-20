@@ -1,6 +1,81 @@
 ﻿@page "{id}"
 @model RepairWeb.Pages.Client.ViewModel
 @{
-    <h1 align="center">Скоро здесь будут подробности рецепта</h1>
-    <a asp-page="/Repair/Client" class="btn btn-primary">Назад</a>
+    <h1 align="center">Скоро здесь будут подробности заявки</h1>
+    ViewData["Title"] = Model.Request.Equipment;
+
+    <form method="post" id="editRequestForm">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Название свойства</th>
+                    <th>Значение</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Оборудование</td>
+                    <td>@Model.Request.Equipment</td>
+                </tr>
+                <tr>
+                    <td>Статус заявки</td>
+                    <td>@Model.Request.Status</td>
+                </tr>
+                <tr>
+                    <td>Описание проблемы</td>
+                    <td>
+                        <textarea id="descriptionField" name="ProblemDescription"
+                                  class="form-control">@Model.Request.ProblemDescription</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Серийный номер</td>
+                    <td>
+                        <textarea id="serialNumberField" name="SerialNumber"
+                                  class="form-control">@Model.Request.SerialNumber</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Имя мастера</td>
+                    <td>@Model.Request.ExecutorName</td>
+                </tr>
+                <tr>
+                    <td>Комментарий мастера</td>
+                    <td>@Model.Request.ExecutorComment</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-end mt-3">
+            <button type="submit" class="btn btn-success" id="saveChangesButton" style="display: none;">Сохранить изменения</button>
+        </div>
+    </form>
+
+    <form method="post" asp-page-handler="Delete" class="d-inline">
+        <a asp-page="/Repair/Client" class="btn btn-secondary mt-3">Назад</a>
+        <input type="hidden" name="id" value="@Model.Request.RequestId" />
+        <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('Вы уверены, что хотите удалить эту заявку?');">
+            Удалить
+        </button>
+    </form>
 }
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const descriptionField = document.getElementById('descriptionField');
+        const serialNumberField = document.getElementById('serialNumberField');
+        const saveButton = document.getElementById('saveChangesButton');
+
+        // Сохраняем исходное значение поля
+        const originalDescription = descriptionField.value;
+
+        // Отслеживаем изменения в поле "Описание"
+        descriptionField.addEventListener('input', function () {
+            saveButton.style.display = 'inline-block'; // Показать кнопку
+        });
+        serialNumberField.addEventListener('input', function () {
+            saveButton.style.display = 'inline-block'; // Показать кнопку
+        });
+    });
+</script>
