@@ -19,7 +19,7 @@ namespace RepairWeb.Data.Services
         public async Task<List<RequestSummaryViewModel>> GetRequestsSummary(ApplicationUser user)
         {
             return await _context.Requests.Where(r => r.ClientId == user.Id)
-                .Select(x => new RequestSummaryViewModel(x.Id, x.Equipment, x.Status))
+                .Select(x => new RequestSummaryViewModel(x.Id, x.Equipment, x.RequestDate, x.Status))
                 .ToListAsync();
         }
 
@@ -56,9 +56,26 @@ namespace RepairWeb.Data.Services
                 ProblemDescription = request.ProblemDescription,
                 RequestId = id,
                 ExecutorComment = request.ExecutorComment ?? "мастер не оставил никаких комментариев",
-                ExecutorName = executorName
+                ExecutorName = executorName,
+                RequestDate = request.RequestDate,
+                FulfillDate = request.FulfillDate
             };
+        }
 
+        public async Task UpdateRequest(ClientRequestViewModel model, string id)
+        {
+            await _context.Requests
+                .Where(r => r.Id.ToString() == id)
+                .ExecuteUpdateAsync(req =>
+                    req.SetProperty(p => p.ProblemDescription, model.ProblemDescription)
+                        .SetProperty(p => p.SerialNumber, model.SerialNumber));
+        }
+
+        public async Task DeleteRequest(string id)
+        {
+            await _context.Requests
+                .Where(r => r.Id.ToString() == id)
+                .ExecuteDeleteAsync();
         }
     }
 }

@@ -29,15 +29,18 @@ namespace RepairWeb.Pages.Client
             return Page();
         }
 
-        public IActionResult OnPostDelete(string id)
+        public async Task<IActionResult> OnPostDelete(string id)
         {
-            return RedirectToPage();
+            await _requestService.DeleteRequest(id);
+
+            return RedirectToPage("/Repair/Client");
         }
 
-        public void OnPost()
+        public async Task<IActionResult> OnPost(string id)
         {
-            var a = Request.ProblemDescription;
-            var b = Request.SerialNumber;
+            await _requestService.UpdateRequest(Request, id);
+
+            return RedirectToPage("/Repair/Client");
         }
     }
 }

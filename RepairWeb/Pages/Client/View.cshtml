@@ -1,7 +1,8 @@
 ﻿@page "{id}"
+@using RepairWeb.Data.Models
 @model RepairWeb.Pages.Client.ViewModel
 @{
-    <h1 align="center">Скоро здесь будут подробности заявки</h1>
+    <h1 align="center">Вот подробности вашей заявки</h1>
     ViewData["Title"] = Model.Request.Equipment;
 
     <form method="post" id="editRequestForm">
@@ -21,6 +22,17 @@
                     <td>Статус заявки</td>
                     <td>@Model.Request.Status</td>
                 </tr>
+                <tr>
+                    <td>Дата создания</td>
+                    <td>@Model.Request.RequestDate.ToString("dd.MM.yyyy")</td>
+                </tr>
+                @if (Model.Request.Status == RequestStatus.Fulfill)
+                {
+                    <tr>
+                        <td>Дата выполнения</td>
+                        <td>@Model.Request.FulfillDate.ToString("dd.MM.yyyy")</td>
+                    </tr>
+                }
                 <tr>
                     <td>Описание проблемы</td>
                     <td>

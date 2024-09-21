@@ -9,5 +9,7 @@
         public string ProblemDescription { get; set; }
         public string Status { get; set; }
         public string SerialNumber { get; set; }
+        public DateTime RequestDate { get; set; }
+        public DateTime FulfillDate { get; set; }
     }
 }

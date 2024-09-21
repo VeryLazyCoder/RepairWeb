@@ -1,7 +1,7 @@
 ﻿@page
 @model RepairWeb.Pages.Client.CreateModel
 @{
-    <p>Для создания заявки заполните следующую форму</p>
+    <h1 align="center">Для создания заявки заполните следующую форму</h1>
     <form method="post" class="form-horizontal">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
@@ -20,14 +20,15 @@
         </div>
         <div class="form-group">
             <label asp-for="Input.SerialNumber" class="col-md-2 control-label"></label>
-            <div class="col-md-15">
+            <div class="col-md-10">
                 <input asp-for="Input.SerialNumber" class="form-control" />
                 <span asp-validation-for="Input.SerialNumber" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <button type="submit" class="btn btn-primary">Создать</button>
+            <div class="col-md-offset-2 mt-3">
+                <a asp-page="/Repair/Client" class="btn btn-secondary mt-3">Назад</a>
+                <button type="submit" class="btn btn-primary mt-3">Создать</button>
             </div>
         </div>
     </form>
