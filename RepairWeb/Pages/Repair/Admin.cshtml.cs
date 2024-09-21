@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RepairWeb.Authorization;
 using RepairWeb.Data;
+using RepairWeb.Data.Models;
+using RepairWeb.Data.Services;
 
 namespace RepairWeb.Pages.Repair
 {
@@ -12,11 +14,14 @@ namespace RepairWeb.Pages.Repair
     public class AdminModel : PageModel
     {
         private UserManager<ApplicationUser> _userManager;
+        private ExecutorRequestService _service;
 
         public List<ApplicationUser> Candidates { get;}
-        public AdminModel(UserManager<ApplicationUser> userManager)
+        public List<AdminRequestModel> Requests { get; set; }
+        public AdminModel(UserManager<ApplicationUser> userManager, ExecutorRequestService service)
         {
             _userManager = userManager;
+            _service = service;
             Candidates = new List<ApplicationUser>();
         }
 
@@ -31,6 +36,8 @@ namespace RepairWeb.Pages.Repair
                 if (claims.Any(c => c.Type == Claims.AdminCandidate))
                     Candidates.Add(user);
             }
+
+            Requests = await _service.GetRequests();
         }
 
         public async Task<IActionResult> OnPostPromote(string candidateId)

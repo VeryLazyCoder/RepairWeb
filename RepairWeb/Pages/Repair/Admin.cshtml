@@ -1,7 +1,30 @@
 ﻿@page
 @model RepairWeb.Pages.Repair.AdminModel
 @{
-    <h1>Это страница менеджера</h1>
+    <h1>Здесь представлены все нераспрелённые заявки</h1>
+    <div class="table-responsive">
+        <table class="table table-striped recipe">
+            <thead>
+            <tr>
+                <th>Оборудование</th>
+                <th>Дата создания</th>
+                <th>Клиент жалуется на</th>
+                <th>Исполнитель</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var request in Model.Requests)
+            {
+                <tr>
+                    <td class="align-middle">@request.Equipment</td>
+                    <td class="align-middle">@request.RequestDate.ToString("dd.MM.yyyy")</td>
+                    <td class="align-middle">@request.ProblemDescription</td>
+                    <td></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
     <p>Список изъявивших желание стать манагером</p>
     <table class="table table-striped" id="ingredients">
         <thead>

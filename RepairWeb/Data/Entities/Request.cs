@@ -5,6 +5,7 @@
         public Guid Id { get; set; }
         public string ClientId { get; set; }
         public string ExecutorId { get; set; }
+        public Executor Executor { get; set; }
         public string Equipment { get; set; }
         public string SerialNumber { get; set; }
         public string ProblemDescription { get; set; }

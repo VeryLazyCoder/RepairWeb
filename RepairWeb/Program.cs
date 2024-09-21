@@ -18,6 +18,7 @@ namespace RepairWeb
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddScoped<RequestService>();
+            builder.Services.AddScoped<ExecutorRequestService>();
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
                 {

@@ -15,7 +15,7 @@ namespace RepairWeb.Data.Models
         [Required]
         [Display(Name = "Серийный номер")]
         public string SerialNumber { get; set; }
-        public string Status { get; set; } = "В обработке";
+        public string Status { get; set; } = RequestStatus.Init;
     }
 }
 
