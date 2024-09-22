@@ -15,6 +15,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RepairWeb.Authorization;
 using RepairWeb.Data;
+using RepairWeb.Data.Entities;
 
 namespace RepairWeb.Areas.Identity.Pages.Account
 {
@@ -26,19 +27,21 @@ namespace RepairWeb.Areas.Identity.Pages.Account
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender, ApplicationDbContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
             Roles = new List<string>() { "клиент", "исполнитель", "подать заявку в администраторы" };
         }
 
@@ -133,6 +136,15 @@ namespace RepairWeb.Areas.Identity.Pages.Account
             {
                 var roleClaim = new Claim(Claims.UserRole, Input.Role);
                 await _userManager.AddClaimAsync(user, roleClaim);
+                if (Input.Role == Roles.ToList()[1])
+                {
+                    await _context.Executors.AddAsync(new Executor()
+                    {
+                        Id = user.Id,
+                        Name = user.FullName
+                    });
+                    await _context.SaveChangesAsync();
+                }
             }
         }
     }

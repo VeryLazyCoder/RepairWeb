@@ -34,7 +34,7 @@ namespace RepairWeb.Data.Services
 
         public async Task UpdateRequestsExecutor(string requestId, string executorId)
         {
-            var request = _context.FindAsync<Request>(requestId).Result;
+            var request = _context.Requests.FirstOrDefault(r => r.Id.ToString() == requestId);
             var executor = _context.FindAsync<Executor>(executorId).Result;
 
             executor.Requests.Add(request);

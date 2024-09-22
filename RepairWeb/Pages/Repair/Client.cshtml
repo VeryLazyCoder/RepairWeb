@@ -11,27 +11,29 @@
     {
         <p>Здесь собраны все ваши заявки</p>
         <div class="table-responsive">
-            <table class="table table-striped recipe">
-                <thead>
-                    <tr>
-                        <th>Оборудование</th>
-                        <th>Дата создания</th>
-                        <th>Статус</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var request in Model.Requests)
-                    {
+            <div style="max-height: 470px; overflow-y: auto;">
+                <table class="table table-striped recipe">
+                    <thead>
                         <tr>
-                            <td class="align-middle">@request.Equipment</td>
-                            <td class="align-middle">@request.RequestDate.ToString("dd.MM.yyyy")</td>
-                            <td class="align-middle">@request.Status</td>
-                            <td class="align-middle"><a asp-page="/Client/View" asp-route-id="@request.Id" class="btn btn-primary">Детали</a></td>
+                            <th>Оборудование</th>
+                            <th>Дата создания</th>
+                            <th>Статус</th>
+                            <th></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var request in Model.Requests)
+                        {
+                            <tr>
+                                <td class="align-middle">@request.Equipment</td>
+                                <td class="align-middle">@request.RequestDate.ToString("dd.MM.yyyy")</td>
+                                <td class="align-middle">@request.Status</td>
+                                <td class="align-middle"><a asp-page="/Client/View" asp-route-id="@request.Id" class="btn btn-primary">Детали</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     }
     <a asp-page="/Client/Create" class="btn btn-primary">Создать заявку</a>

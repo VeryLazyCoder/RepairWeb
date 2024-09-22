@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RepairWeb.Authorization;
 using RepairWeb.Data;
+using RepairWeb.Data.Entities;
 using RepairWeb.Data.Models;
 using RepairWeb.Data.Services;
 
@@ -15,8 +16,9 @@ namespace RepairWeb.Pages.Repair
     {
         private UserManager<ApplicationUser> _userManager;
         private ExecutorRequestService _service;
-
+        
         public List<ApplicationUser> Candidates { get;}
+        public List<Executor> Executors { get; set; }
         public List<AdminRequestModel> Requests { get; set; }
         public AdminModel(UserManager<ApplicationUser> userManager, ExecutorRequestService service)
         {
@@ -38,6 +40,16 @@ namespace RepairWeb.Pages.Repair
             }
 
             Requests = await _service.GetRequests();
+            Executors = await _service.GetExecutors();
+        }
+
+        public async Task<IActionResult> OnPostAssign(string requestId, string executorId)
+        {
+            if (executorId == null)
+                return RedirectToAction("OnGet");
+            await _service.UpdateRequestsExecutor(requestId, executorId);
+
+            return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostPromote(string candidateId)
