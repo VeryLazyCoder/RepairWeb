@@ -1,35 +1,43 @@
 ﻿@page
 @model RepairWeb.Pages.Client.CreateModel
 @{
-    <h1 align="center">Для создания заявки заполните следующую форму</h1>
-    <form method="post" class="form-horizontal">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="Input.Equipment" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Input.Equipment" class="form-control" />
-                <span asp-validation-for="Input.Equipment" class="text-danger"></span>
+    <h1 class="text-center mb-4">Для создания заявки заполните следующую форму</h1>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post" class="form-horizontal">
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="Input.Equipment" class="form-label"></label>
+                                <input asp-for="Input.Equipment" class="form-control" />
+                                <span asp-validation-for="Input.Equipment" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="Input.ProblemDescription" class="form-label"></label>
+                                <textarea asp-for="Input.ProblemDescription" class="form-control"></textarea>
+                                <span asp-validation-for="Input.ProblemDescription" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="Input.SerialNumber" class="form-label"></label>
+                                <input asp-for="Input.SerialNumber" class="form-control" />
+                                <span asp-validation-for="Input.SerialNumber" class="text-danger"></span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-4">
+                                <a asp-page="/Repair/Client" class="btn btn-secondary">Назад</a>
+                                <button type="submit" class="btn btn-primary">Создать</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="Input.ProblemDescription" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <textarea asp-for="Input.ProblemDescription" class="form-control"></textarea>
-                <span asp-validation-for="Input.ProblemDescription" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Input.SerialNumber" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Input.SerialNumber" class="form-control" />
-                <span asp-validation-for="Input.SerialNumber" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 mt-3">
-                <a asp-page="/Repair/Client" class="btn btn-secondary mt-3">Назад</a>
-                <button type="submit" class="btn btn-primary mt-3">Создать</button>
-            </div>
-        </div>
-    </form>
+    </div>
+
 }

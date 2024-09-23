@@ -42,5 +42,21 @@ namespace RepairWeb.Data.Services
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<ExecutorRequestSummary>> GetRequestsSummary(string executorId)
+        {
+            return await _context.Requests
+                .Where(r => r.ExecutorId == executorId)
+                .OrderBy(r => r.RequestDate)
+                .Select(r => new ExecutorRequestSummary()
+                {
+                    ProblemDescription = r.ProblemDescription,
+                    SerialNumber = r.SerialNumber,
+                    Equipment = r.Equipment,
+                    RequestId = r.Id.ToString(),
+                    Status = r.Status
+                })
+                .ToListAsync();
+        }
     }
 }

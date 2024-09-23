@@ -2,39 +2,37 @@
 @using RepairWeb.Data.Models
 @model RepairWeb.Pages.Repair.ClientModel
 @{
-    <h1>Это страница клиента</h1>
     @if (!Model.Requests.Any())
     {
-        <p>У вас нет заявок, можете создать новую, когда что-нибудь сломается</p>
+        <p>У вас нет заявок, можете создать новую, когда что-нибудь сломается.</p>
     }
     else
     {
-        <p>Здесь собраны все ваши заявки</p>
-        <div class="table-responsive">
-            <div style="max-height: 470px; overflow-y: auto;">
-                <table class="table table-striped recipe">
-                    <thead>
-                        <tr>
-                            <th>Оборудование</th>
-                            <th>Дата создания</th>
-                            <th>Статус</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var request in Model.Requests)
-                        {
-                            <tr>
-                                <td class="align-middle">@request.Equipment</td>
-                                <td class="align-middle">@request.RequestDate.ToString("dd.MM.yyyy")</td>
-                                <td class="align-middle">@request.Status</td>
-                                <td class="align-middle"><a asp-page="/Client/View" asp-route-id="@request.Id" class="btn btn-primary">Детали</a></td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+        <p class="text-center mb-4">Здесь собраны все ваши заявки:</p>
+
+        <div class="container">
+            <div class="row">
+                @foreach (var request in Model.Requests)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Оборудование: @request.Equipment</h5>
+                                <p class="card-text"><strong>Дата создания:</strong> @request.RequestDate.ToString("dd.MM.yyyy")</p>
+                                <p class="card-text"><strong>Статус:</strong> @request.Status</p>
+                            </div>
+                            <div class="card-footer d-flex justify-content-center mt-4">
+                                <a asp-page="/Client/View" asp-route-id="@request.Id" class="btn btn-primary">Детали</a>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     }
-    <a asp-page="/Client/Create" class="btn btn-primary">Создать заявку</a>
+
+    <div class="d-flex justify-content-center mt-4">
+        <a asp-page="/Client/Create" class="btn btn-success">Создать заявку</a>
+    </div>
 }
+

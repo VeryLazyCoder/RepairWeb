@@ -19,8 +19,8 @@ namespace RepairWeb.Data.Services
         public async Task<List<RequestSummaryViewModel>> GetRequestsSummary(ApplicationUser user)
         {
             return await _context.Requests.Where(r => r.ClientId == user.Id)
-                .Select(x => new RequestSummaryViewModel(x.Id, x.Equipment, x.RequestDate, x.Status))
                 .OrderBy(r => r.RequestDate)
+                .Select(x => new RequestSummaryViewModel(x.Id, x.Equipment, x.RequestDate, x.Status))
                 .ToListAsync();
         }
 

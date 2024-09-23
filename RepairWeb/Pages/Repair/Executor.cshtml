@@ -1,5 +1,31 @@
 ﻿@page
+@using RepairWeb.Data.Models
 @model ExecutorModel
 @{
-    <h1>Это страница исполнителя</h1>
+    <h1 class="mb-4" align="center">Требуется ремонт следующего оборудования</h1>
+    <div class="container">
+        <div class="row">
+            @foreach (var request in Model.Requests)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="card-title d-flex justify-content-center">@request.Equipment</h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Жалоба клиента: @request.ProblemDescription</p>
+                            <p class="card-text">Серийный номер: @request.SerialNumber</p>
+                            <p class="card-text">Статус: @request.Status</p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-center mt-4">
+                            <a asp-page="/Executor/View" asp-route-id="@request.RequestId"
+                               class="btn btn-primary">
+                                @Model.GetButtonText(request.Status)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 }

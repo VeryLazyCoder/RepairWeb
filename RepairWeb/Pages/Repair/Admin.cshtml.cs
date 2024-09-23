@@ -18,7 +18,7 @@ namespace RepairWeb.Pages.Repair
         private ExecutorRequestService _service;
         
         public List<ApplicationUser> Candidates { get;}
-        public List<Executor> Executors { get; set; }
+        public List<Data.Entities.Executor> Executors { get; set; }
         public List<AdminRequestModel> Requests { get; set; }
         public AdminModel(UserManager<ApplicationUser> userManager, ExecutorRequestService service)
         {
