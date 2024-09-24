@@ -58,5 +58,31 @@ namespace RepairWeb.Data.Services
                 })
                 .ToListAsync();
         }
+
+        public async Task<ExecutorRequestViewModel?> GetRequest(string id)
+        {
+            return await _context.Requests
+                .Where(r => r.Id.ToString() == id)
+                .Select(r => new ExecutorRequestViewModel
+                {
+                    Equipment = r.Equipment,
+                    ExecutorComment = r.ExecutorComment,
+                    Id = r.Id.ToString(),
+                    Status = r.Status,
+                    ProblemDescription = r.ProblemDescription,
+                    RequestDate = r.RequestDate,
+                })
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task UpdateRequestStatus(string id, string comment, string status)
+        {
+            await _context.Requests
+                .Where(r => r.Id.ToString() == id)
+                .ExecuteUpdateAsync(r =>
+                    r.SetProperty(p => p.ExecutorComment, comment)
+                        .SetProperty(p => p.Status, status));
+
+        }
     }
 }

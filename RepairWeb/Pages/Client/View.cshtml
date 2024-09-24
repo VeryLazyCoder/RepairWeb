@@ -36,6 +36,15 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <strong>Имя мастера</strong>
+                        <div>@Model.Request.ExecutorName</div>
+                    </div>
+                </div>
+            </div>
 
             @if (Model.Request.Status == RequestStatus.Fulfill)
             {
@@ -67,16 +76,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <strong>Имя мастера</strong>
-                        <div>@Model.Request.ExecutorName</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 mb-4">
+            <div class="col-md-12 mb-4">
                 <div class="card">
                     <div class="card-body">
                         <strong>Комментарий мастера</strong>

@@ -1,5 +1,5 @@
 ﻿@page
-@using RepairWeb.Data.Models
+
 @model RepairWeb.Pages.Repair.ClientModel
 @{
     @if (!Model.Requests.Any())
@@ -8,7 +8,7 @@
     }
     else
     {
-        <p class="text-center mb-4">Здесь собраны все ваши заявки:</p>
+        <h3 class="text-center mb-4">Здесь собраны все ваши заявки:</h3>
 
         <div class="container">
             <div class="row">
