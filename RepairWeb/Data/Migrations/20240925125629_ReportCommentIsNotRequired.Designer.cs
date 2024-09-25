@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RepairWeb.Data;
 
@@ -11,9 +12,11 @@ using RepairWeb.Data;
 namespace RepairWeb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240925125629_ReportCommentIsNotRequired")]
+    partial class ReportCommentIsNotRequired
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,18 +261,15 @@ namespace RepairWeb.Data.Migrations
                     b.Property<DateTime>("CreatingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DurationDays")
-                        .HasColumnType("int");
-
-                    b.Property<TimeSpan>("DurationTime")
-                        .HasColumnType("time");
-
                     b.Property<string>("ExecutorId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("RequestId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<TimeSpan>("TimeSpent")
+                        .HasColumnType("time");
 
                     b.HasKey("Id");
 

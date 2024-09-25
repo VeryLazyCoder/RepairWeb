@@ -14,8 +14,7 @@ namespace RepairWeb.Data.Configurations
                 .WithOne(req => req.Report)
                 .HasForeignKey<Report>(r => r.RequestId);
 
-            builder.Property(r => r.Comments).HasMaxLength(120);
-            
+            builder.Property(r => r.Comments).HasMaxLength(120).IsRequired(false);
         }
     }
 }

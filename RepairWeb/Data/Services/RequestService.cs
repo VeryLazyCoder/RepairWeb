@@ -33,6 +33,7 @@ namespace RepairWeb.Data.Services
                 Equipment = model.Equipment,
                 SerialNumber = model.SerialNumber,
                 Status = model.Status,
+                RequestDate = DateTime.Now,
             };
 
             await _context.Requests.AddAsync(request);

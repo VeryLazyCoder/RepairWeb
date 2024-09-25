@@ -19,6 +19,7 @@ namespace RepairWeb
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddScoped<RequestService>();
             builder.Services.AddScoped<ExecutorRequestService>();
+            builder.Services.AddScoped<ReportService>();
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
                 {

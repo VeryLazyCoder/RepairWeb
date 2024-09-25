@@ -46,7 +46,7 @@ namespace RepairWeb.Data.Services
         public async Task<List<ExecutorRequestSummary>> GetRequestsSummary(string executorId)
         {
             return await _context.Requests
-                .Where(r => r.ExecutorId == executorId)
+                .Where(r => r.ExecutorId == executorId && r.Report == null)
                 .OrderBy(r => r.RequestDate)
                 .Select(r => new ExecutorRequestSummary()
                 {
@@ -82,6 +82,40 @@ namespace RepairWeb.Data.Services
                 .ExecuteUpdateAsync(r =>
                     r.SetProperty(p => p.ExecutorComment, comment)
                         .SetProperty(p => p.Status, status));
+
+        }
+
+        public async Task<string> CreateReport(ExecutorRequestViewModel requestModel)
+        {
+            var request = await _context.Requests
+                .Where(r => r.Id.ToString() == requestModel.Id)
+                .FirstOrDefaultAsync() ?? throw new NullReferenceException();
+
+            await FulfillRequest(request);
+            
+            var report = new Report
+            {
+                Request = request,
+                CreatingDate = DateTime.Now,
+                ExecutorId = request.ExecutorId,
+                TimeSpent = request.FulfillDate - request.RequestDate
+            };
+            await _context.Reports.AddAsync(report);
+            request.Report = report;
+
+            await _context.SaveChangesAsync();
+
+            return report.Id.ToString();
+        }
+
+        private async Task FulfillRequest(Request requestModel)
+        {
+            await UpdateRequestStatus(requestModel.Id.ToString(),
+                requestModel.ExecutorComment, requestModel.Status);
+            
+            await _context.Requests.Where(r => r.Id == requestModel.Id)
+                .ExecuteUpdateAsync(r =>
+                    r.SetProperty(p => p.FulfillDate, DateTime.Now));
 
         }
     }

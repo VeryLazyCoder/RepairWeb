@@ -1,4 +1,46 @@
-﻿@page
+﻿@page "{id}"
 @model RepairWeb.Pages.Executor.ReportModel
 @{
+    <form method="post">
+        <div class="d-flex align-items-center">
+            <h1>Отчёт по заявке на ремонт оборудования "@Model.Report.Equipment" с серийным номером @Model.Report.SerialNumber</h1>
+        </div>
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <label asp-for="Report.Cost">Итоговая стоимость ремонта</label>
+                            <input asp-for="Report.Cost"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <strong>Затраченное время</strong>
+                            <div>@string.Format("{0:%d} д. {0:%h} ч. {0:%m} мин.", Model.Report.TimeSpent)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-12 mb-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <strong>Ваш комментарий</strong>
+                            <textarea asp-for="Report.Comment" class="form-control">@Model.Report.Comment</textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-center mt-3">
+                    <input type="hidden" name="id" value="@Model.Report.Id" />
+                    <button type="submit" class="btn btn-success mt-3" onclick="return confirm('Вы уверены, что хотите завершить работу над отчётом?');">
+                        Завершить ремонт
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
 }
