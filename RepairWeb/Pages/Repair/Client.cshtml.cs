@@ -12,7 +12,7 @@ namespace RepairWeb.Pages.Repair
     [Authorize(Policies.IsClient)]
     public class ClientModel : PageModel
     {
-        public List<RequestSummaryViewModel> Requests { get; set; }
+        public List<RequestSummaryModel> Requests { get; set; }
         
         private UserManager<ApplicationUser> _userManager;
         private RequestService _requestService;

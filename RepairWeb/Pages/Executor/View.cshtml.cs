@@ -33,6 +33,7 @@ namespace RepairWeb.Pages.Executor
         public async Task<IActionResult> OnPostReportAsync(string id)
         {
             Request.Id = id;
+            await _service.UpdateRequestStatus(id, Request.ExecutorComment, Request.Status);
             var reportId = await _service.CreateReport(Request);
 
             return RedirectToPage("/Executor/Report", new {id = reportId});

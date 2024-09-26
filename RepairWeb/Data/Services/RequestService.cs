@@ -16,11 +16,11 @@ namespace RepairWeb.Data.Services
             _userManager = userManager;
         }
 
-        public async Task<List<RequestSummaryViewModel>> GetRequestsSummary(ApplicationUser user)
+        public async Task<List<RequestSummaryModel>> GetRequestsSummary(ApplicationUser user)
         {
             return await _context.Requests.Where(r => r.ClientId == user.Id)
                 .OrderBy(r => r.RequestDate)
-                .Select(x => new RequestSummaryViewModel(x.Id, x.Equipment, x.RequestDate, x.Status))
+                .Select(x => new RequestSummaryModel(x.Id, x.Equipment, x.RequestDate, x.Status))
                 .ToListAsync();
         }
 
