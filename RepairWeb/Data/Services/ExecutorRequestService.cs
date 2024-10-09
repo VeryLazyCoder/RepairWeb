@@ -110,10 +110,12 @@ namespace RepairWeb.Data.Services
 
         private async Task FulfillRequest(Request requestModel)
         {
+            var date = DateTime.Now;
             await _context.Requests.Where(r => r.Id == requestModel.Id)
                 .ExecuteUpdateAsync(r =>
-                    r.SetProperty(p => p.FulfillDate, DateTime.Now));
+                    r.SetProperty(p => p.FulfillDate, date));
 
+            requestModel.FulfillDate = date;
         }
     }
 }

@@ -1,4 +1,66 @@
 ﻿@page
 @model RepairWeb.Pages.admin.ReportsModel
 @{
+    <div class="container mt-4">
+        <div class="row">
+            @foreach (var report in Model.Reports)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm h-100 rounded-lg">
+                        <div class="card-header bg-primary text-white text-center">
+                            <h5 class="card-title mb-0">@report.Equipment</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <strong>Жалоба клиента:</strong>
+                                <p class="mb-0">@report.ClientsDescription</p>
+                            </div>
+                            <hr />
+
+                            <div class="d-flex justify-content-between mb-3">
+                                <strong>Имя клиента:</strong>
+                                <p class="mb-0">@report.ClientName</p>
+                            </div>
+                            <hr />
+
+                            <div class="d-flex justify-content-between mb-3">
+                                <strong>Мастер:</strong>
+                                <p class="mb-0">@report.ExecutorName</p>
+                            </div>
+                            <hr />
+
+                            <div class="d-flex justify-content-between mb-3">
+                                <strong>Комментарий исполнителя:</strong>
+                                <p class="mb-0">@report.ExecutorComment</p>
+                            </div>
+                            <hr />
+
+                            <div class="d-flex justify-content-between mb-3">
+                                <strong>Итоговая цена:</strong>
+                                <p class="text-success mb-0">@report.Cost ₽</p>
+                            </div>
+                            <hr />
+
+                            <div class="d-flex justify-content-between mb-3">
+                                <strong>Дата выполнения:</strong>
+                                <p class="mb-0">@report.FulfillDate.ToString("dd.MM.yyyy")</p>
+                            </div>
+                            <hr />
+
+                            <div class="d-flex justify-content-between mb-3">
+                                <strong>Общее время выполнения:</strong>
+                                <p class="mb-0">@report.TimeSpent</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-start">
+        <a asp-page="/Repair/Admin" class="btn btn-primary mt-3">Назад</a>
+    </div>
+
+
 }

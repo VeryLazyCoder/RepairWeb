@@ -54,7 +54,9 @@ namespace RepairWeb.Data.Services
                     TimeSpent = r.TimeSpent,
                     ClientsDescription = r.Request.ProblemDescription,
                     ExecutorName = r.Request.Executor.Name,
-                    ClientName = _userManager.Users.Where(u => u.Id == r.Request.ClientId).FirstOrDefault().FullName
+                    ClientName = _userManager.Users
+                        .Where(u => u.Id == r.Request.ClientId)
+                        .FirstOrDefault().FullName
                 })
                 .ToListAsync();
         }
