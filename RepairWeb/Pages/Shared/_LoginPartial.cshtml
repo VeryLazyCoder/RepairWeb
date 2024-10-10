@@ -7,6 +7,14 @@
 {
         var user = await UserManager.GetUserAsync(User);
         var fullName = user?.FullName ?? "User";
+    <div class="d-flex align-items-center">
+        @if (!string.IsNullOrEmpty(user?.ProfileImageURL))
+        {
+            <!-- Фото профиля -->
+            <img src="@user.ProfileImageURL" alt="Profile Image"
+                 class="rounded-circle" style="width: 40px; height: 40px; margin-right: 10px;" />
+        }
+    </div>
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @fullName!</a>
     </li>
