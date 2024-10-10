@@ -77,12 +77,24 @@ namespace RepairWeb.Data.Services
 
         public async Task UpdateRequestStatus(string id, string comment, string status)
         {
-            await _context.Requests
+            var request = await _context.Requests
                 .Where(r => r.Id.ToString() == id)
-                .ExecuteUpdateAsync(r =>
-                    r.SetProperty(p => p.ExecutorComment, comment)
-                        .SetProperty(p => p.Status, status));
+                .FirstOrDefaultAsync() ?? throw new NullReferenceException();
 
+            request.Status = status;
+            request.ExecutorComment = comment;
+
+            await _context.Notifications.AddAsync(new Notification()
+            {
+                ClientId = request.ClientId,
+                Comment = comment,
+                Created = DateTime.Now,
+                Equipment = request.Equipment,
+                RequestId = id,
+                Status = status
+            });
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<string> CreateReport(ExecutorRequestViewModel requestModel)
@@ -92,7 +104,7 @@ namespace RepairWeb.Data.Services
                 .FirstOrDefaultAsync() ?? throw new NullReferenceException();
 
             await FulfillRequest(request);
-            
+
             var report = new Report
             {
                 Request = request,

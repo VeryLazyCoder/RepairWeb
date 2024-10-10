@@ -100,19 +100,17 @@ namespace RepairWeb.Areas.Identity.Pages.Account.Manage
                 var fileName = Path.GetFileName(Input.ProfileImage.FileName);
                 var uniqueFileName = Guid.NewGuid() + "_" + fileName;
 
-                // Путь для сохранения файла
                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                // Сохранение файла
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                await using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     await Input.ProfileImage.CopyToAsync(fileStream);
                 }
 
                 
-                user.ProfileImageURL = "/images/" + uniqueFileName;  // Сохраняем URL изображения
-                await _userManager.UpdateAsync(user);  // Обновляем пользователя в базе данных
+                user.ProfileImageURL = "/images/" + uniqueFileName;
+                await _userManager.UpdateAsync(user);
             }
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
