@@ -16,9 +16,11 @@ namespace RepairWeb
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
             builder.Services.AddScoped<RequestService>();
             builder.Services.AddScoped<ExecutorRequestService>();
             builder.Services.AddScoped<ReportService>();
+            builder.Services.AddScoped<NotificationService>();
             
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
@@ -63,6 +65,11 @@ namespace RepairWeb
             app.UseAuthorization();
 
             app.MapRazorPages();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
 
             app.Run();
         }

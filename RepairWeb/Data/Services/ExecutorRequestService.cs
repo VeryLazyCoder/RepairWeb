@@ -83,8 +83,8 @@ namespace RepairWeb.Data.Services
 
             request.Status = status;
             request.ExecutorComment = comment;
-
-            await _context.Notifications.AddAsync(new Notification()
+            
+            _context.Notifications.Add(new Notification()
             {
                 ClientId = request.ClientId,
                 Comment = comment,

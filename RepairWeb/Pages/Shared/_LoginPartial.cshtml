@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using RepairWeb.Authorization
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
@@ -7,12 +8,20 @@
     {
         var user = await UserManager.GetUserAsync(User);
         var fullName = user?.FullName ?? "User";
-        var profileImageUrl = user?.ProfileImageURL == "" ? "/images/defaultUser.png" : 
-            user?.ProfileImageURL;
-        <div class="d-flex align-items-center">
-            <img src="@profileImageUrl" alt="Profile Image"
-                 class="rounded-circle" style="width: 40px; height: 40px; margin-right: 10px;" />
-        </div>
+        var profileImageUrl = user?.ProfileImageURL == "" ? "/images/defaultUser.png" :
+        user?.ProfileImageURL;
+        if (User.HasClaim(Claims.UserRole, "клиент"))
+        {
+            <partial name="_ClientNotificationAvatar" />
+        }
+        else
+        {
+            <div class="d-flex align-items-center">
+                <img src="@profileImageUrl" alt="Profile Image"
+                     class="rounded-circle" style="width: 40px; height: 40px; margin-right: 10px;" />
+            </div>
+        }
+
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @fullName!</a>
         </li>

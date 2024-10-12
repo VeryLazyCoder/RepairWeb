@@ -1,0 +1,102 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using RepairWeb.Data.Services
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject NotificationService NotificationService
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var profileImageUrl = string.IsNullOrEmpty(user?.ProfileImageURL) ? "/images/defaultUser.png" : user?.ProfileImageURL;
+    var unreadNotifications = await NotificationService.GetNotifications(user.Id);
+    var unreadNotificationsCount = unreadNotifications.Count;
+}
+
+<div class="dropdown">
+    <div class="d-flex align-items-center position-relative" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+        <img src="@profileImageUrl" alt="Profile Image" class="rounded-circle" style="width: 40px; height: 40px; margin-right: 10px;" />
+        @if (unreadNotificationsCount > 0)
+        {
+            <span class="badge bg-danger position-absolute top-0 start-100 translate-middle p-1 rounded-circle">
+                @unreadNotificationsCount
+            </span>
+        }
+    </div>
+
+    <ul class="dropdown-menu dropdown-menu-end">
+        @if (unreadNotificationsCount == 0)
+        {
+            <li><span class="dropdown-item text-muted">У вас нет новых уведомлений</span></li>
+        }
+        else
+        {
+            @foreach (var notification in unreadNotifications)
+            {
+                <li id="notification-@notification.Id" class="dropdown-item d-flex justify-content-between align-items-center">
+                    <span class="notification-text">
+                        Оборудованию <strong>@notification.Equipment</strong> установлен статус <strong>@notification.Status</strong>.
+                        Комментарий исполнителя: <em>@notification.Comment</em><br />
+                        <small class="text-muted">Получено: @notification.Created.ToString("dd.MM.yyyy HH:mm")</small>
+                    </span>
+                    <button class="btn btn-sm btn-link mark-as-read" data-id="@notification.Id">
+                        Отметить прочитанным
+                    </button>
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const markAsReadButtons = document.querySelectorAll('.mark-as-read');
+
+        // Получаем элемент для отображения количества уведомлений
+        const notificationBadge = document.querySelector('.badge.bg-danger');
+        let unreadNotificationsCount = @unreadNotificationsCount;
+
+        markAsReadButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const notificationId = this.getAttribute('data-id');
+                console.log(`Нажата кнопка для уведомления с ID: ${notificationId}`);
+
+                // Отправляем запрос к API для отметки уведомления как прочитанного
+                fetch(`/api/Notification/MarkAsRead/${notificationId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log(`Уведомление с ID: ${notificationId} успешно отмечено как прочитанное`);
+
+                            // Скрываем уведомление из выпадающего списка
+                            const notificationItem = document.getElementById(`notification-${notificationId}`);
+                            if (notificationItem) {
+                                notificationItem.remove(); // Удаляем уведомление из DOM
+                            }
+
+                            // Уменьшаем количество непрочитанных уведомлений
+                            unreadNotificationsCount--;
+                            console.log(`Оставшихся уведомлений: ${unreadNotificationsCount}`);
+
+                            // Если уведомлений больше нет, скрываем бейдж
+                            if (unreadNotificationsCount <= 0 && notificationBadge) {
+                                notificationBadge.remove(); // Удаляем бейдж
+                            } else {
+                                // Обновляем количество на бейдже
+                                if (notificationBadge) {
+                                    notificationBadge.textContent = unreadNotificationsCount;
+                                }
+                            }
+                        } else {
+                            console.error('Ошибка при отметке уведомления как прочитанного');
+                        }
+                    })
+                    .catch(error => console.error('Ошибка запроса:', error));
+            });
+        });
+    });
+</script>
+
