@@ -14,5 +14,6 @@
         public DateTime RequestDate { get; set; }
         public DateTime FulfillDate { get; set; }
         public Report Report { get; set; }
+        public List<Review> Reviews { get; set; } = new();
     }
 }

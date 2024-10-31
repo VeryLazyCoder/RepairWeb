@@ -1,0 +1,66 @@
+﻿@page "{id}"
+@model RepairWeb.Pages.Client.ReviewModel
+@{
+    ViewData["Title"] = "Оставить отзыв";
+}
+
+<h2>Оставить отзыв</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label for="Rating">Оценка мастера</label>
+        <div class="rating" id="starRating">
+            @for (int i = 1; i <= 10; i++)
+            {
+                <i class="far fa-star" data-value="@i"></i>
+            }
+        </div>
+        <input type="hidden" name="Rating" id="ratingInput" value="0">
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="ReviewText">Ваш отзыв</label>
+        <textarea class="form-control" id="ReviewText" name="Comment" rows="4" placeholder="Напишите свой отзыв">@Model.Input.Comment</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Отправить отзыв</button>
+</form>
+
+<style>
+    .rating {
+        font-size: 2rem;
+        color: #ffd700;
+    }
+
+        .rating i {
+            cursor: pointer;
+            margin-right: 5px;
+        }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const stars = document.querySelectorAll('.rating i');
+        const ratingInput = document.getElementById('ratingInput');
+
+        stars.forEach(star => {
+            star.addEventListener('click', function () {
+                const rating = this.getAttribute('data-value');
+
+                // Устанавливаем значение в скрытое поле input
+                ratingInput.value = rating;
+
+                // Обновляем визуально выбранные звёзды
+                stars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.remove('far');
+                        s.classList.add('fas'); // Закрашенная звезда
+                    } else {
+                        s.classList.remove('fas');
+                        s.classList.add('far'); // Пустая звезда
+                    }
+                });
+            });
+        });
+    });
+</script>

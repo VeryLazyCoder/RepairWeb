@@ -16,6 +16,7 @@ namespace RepairWeb.Data
         public DbSet<Request> Requests { get; set; }
         public DbSet<Executor> Executors { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -7,58 +7,69 @@
 @{
     var user = await UserManager.GetUserAsync(User);
     var profileImageUrl = string.IsNullOrEmpty(user?.ProfileImageURL) ? "/images/defaultUser.png" : user?.ProfileImageURL;
+
     var unreadNotifications = await NotificationService.GetNotifications(user.Id);
     var unreadNotificationsCount = unreadNotifications.Count;
-}
 
-<div class="dropdown">
-    <div class="d-flex align-items-center position-relative" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-        <img src="@profileImageUrl" alt="Profile Image" class="rounded-circle" style="width: 40px; height: 40px; margin-right: 10px;" />
-        @if (unreadNotificationsCount > 0)
-        {
-            <span class="badge bg-danger position-absolute top-0 start-100 translate-middle p-1 rounded-circle">
-                @unreadNotificationsCount
-            </span>
-        }
-    </div>
+    <div class="dropdown">
+        <div class="d-flex align-items-center position-right" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+            <img src="@profileImageUrl" alt="Profile Image"
+                 class="rounded-circle" style="width: 40px; height: 40px; margin-right: 10px;" />
 
-    <ul class="dropdown-menu dropdown-menu-end">
-        @if (unreadNotificationsCount == 0)
-        {
-            <li><span class="dropdown-item text-muted">У вас нет новых уведомлений</span></li>
-        }
-        else
-        {
-            @foreach (var notification in unreadNotifications)
+            @if (unreadNotificationsCount > 0)
             {
-                <li id="notification-@notification.Id" class="dropdown-item d-flex justify-content-between align-items-center">
-                    <span class="notification-text">
-                        Оборудованию <strong>@notification.Equipment</strong> установлен статус <strong>@notification.Status</strong>.
-                        Комментарий исполнителя: <em>@notification.Comment</em><br />
-                        <small class="text-muted">Получено: @notification.Created.ToString("dd.MM.yyyy HH:mm")</small>
-                    </span>
-                    <button class="btn btn-sm btn-link mark-as-read" data-id="@notification.Id">
-                        Отметить прочитанным
-                    </button>
-                </li>
+                <span class="badge bg-danger position-absolute top-0 start-100 translate-middle p-1 rounded-circle">
+                    @unreadNotificationsCount
+                </span>
             }
-        }
-    </ul>
-</div>
+        </div>
+
+        <ul class="dropdown-menu dropdown-menu-end" style="max-width: 800px; padding: 15px; max-height: 50vh; overflow-y: auto;">
+            @if (unreadNotificationsCount == 0)
+            {
+                <li><span class="dropdown-item text-center">У вас нет новых уведомлений</span></li>
+            }
+            else
+            {
+                @foreach (var notification in unreadNotifications)
+                {
+                    <li class="notification-item d-flex justify-content-between align-items-center p-3 mb-2" id="notification-@notification.Id"
+                        style="background-color: #f0f8ff; border-radius: 8px; border: 2px solid #007bff;">
+                        <div class="d-flex flex-column" style="width: 80%;">
+                            <span class="dropdown-item-text" style="font-size: 14px;">
+                                <strong>Оборудование:</strong> @notification.Equipment
+                            </span>
+                            <span class="dropdown-item-text" style="font-size: 14px;">
+                                <strong>Статус:</strong> @notification.Status
+                            </span>
+                            <span class="dropdown-item-text" style="font-size: 14px;">
+                                <strong>Комментарий:</strong> @notification.Comment
+                            </span>
+                            <span class="dropdown-item-text text-muted" style="font-size: 12px;">
+                                @notification.Created
+                            </span>
+                        </div>
+                        <button class="btn btn-sm btn-success mark-as-read" data-id="@notification.Id" style="font-size: 12px;">
+                            Отметить прочитанным
+                        </button>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+}
 
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const markAsReadButtons = document.querySelectorAll('.mark-as-read');
 
-        // Получаем элемент для отображения количества уведомлений
         const notificationBadge = document.querySelector('.badge.bg-danger');
         let unreadNotificationsCount = @unreadNotificationsCount;
 
         markAsReadButtons.forEach(button => {
             button.addEventListener('click', function () {
                 const notificationId = this.getAttribute('data-id');
-                console.log(`Нажата кнопка для уведомления с ID: ${notificationId}`);
 
                 // Отправляем запрос к API для отметки уведомления как прочитанного
                 fetch(`/api/Notification/MarkAsRead/${notificationId}`, {
@@ -69,23 +80,15 @@
                 })
                     .then(response => {
                         if (response.ok) {
-                            console.log(`Уведомление с ID: ${notificationId} успешно отмечено как прочитанное`);
-
-                            // Скрываем уведомление из выпадающего списка
                             const notificationItem = document.getElementById(`notification-${notificationId}`);
                             if (notificationItem) {
-                                notificationItem.remove(); // Удаляем уведомление из DOM
+                                notificationItem.remove();
                             }
-
-                            // Уменьшаем количество непрочитанных уведомлений
                             unreadNotificationsCount--;
-                            console.log(`Оставшихся уведомлений: ${unreadNotificationsCount}`);
 
-                            // Если уведомлений больше нет, скрываем бейдж
                             if (unreadNotificationsCount <= 0 && notificationBadge) {
-                                notificationBadge.remove(); // Удаляем бейдж
+                                notificationBadge.remove();
                             } else {
-                                // Обновляем количество на бейдже
                                 if (notificationBadge) {
                                     notificationBadge.textContent = unreadNotificationsCount;
                                 }

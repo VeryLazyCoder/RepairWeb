@@ -21,6 +21,7 @@ namespace RepairWeb
             builder.Services.AddScoped<ExecutorRequestService>();
             builder.Services.AddScoped<ReportService>();
             builder.Services.AddScoped<NotificationService>();
+            builder.Services.AddScoped<ReviewService>();
             
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
