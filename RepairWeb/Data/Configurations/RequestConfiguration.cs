@@ -20,6 +20,13 @@ namespace RepairWeb.Data.Configurations
             builder.HasOne(r => r.Executor)
                 .WithMany(e => e.Requests)
                 .HasForeignKey(r => r.ExecutorId);
+
+            builder.HasOne(r => r.Report)
+                .WithOne(rep => rep.Request);
+
+            builder.HasOne(r => r.Review)
+                .WithOne(rev => rev.Request)
+                .HasForeignKey<Request>(r => r.ReviewId);
         }
     }
 }

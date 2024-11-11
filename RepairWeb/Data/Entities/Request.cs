@@ -5,6 +5,7 @@
         public Guid Id { get; set; }
         public string ClientId { get; set; }
         public string ExecutorId { get; set; }
+        public Guid ReviewId { get; set; }
         public Executor Executor { get; set; }
         public string Equipment { get; set; }
         public string SerialNumber { get; set; }
@@ -13,7 +14,7 @@
         public string ExecutorComment { get; set; }
         public DateTime RequestDate { get; set; }
         public DateTime FulfillDate { get; set; }
-        public Report Report { get; set; }
-        public List<Review> Reviews { get; set; } = new();
+        public Report? Report { get; set; }
+        public Review? Review { get; set; }
     }
 }

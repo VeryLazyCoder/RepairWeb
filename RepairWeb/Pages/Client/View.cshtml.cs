@@ -21,7 +21,7 @@ namespace RepairWeb.Pages.Client
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
-            Request = await _requestService.GetRequest(id);
+            Request = await _requestService.GetClientsRequestModel(id);
 
             if (Request == null)
                 return NotFound();

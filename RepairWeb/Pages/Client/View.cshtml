@@ -106,15 +106,13 @@
         const serialNumberField = document.getElementById('serialNumberField');
         const saveButton = document.getElementById('saveChangesButton');
 
-        // Сохраняем исходное значение поля
         const originalDescription = descriptionField.value;
 
-        // Отслеживаем изменения в поле "Описание"
         descriptionField.addEventListener('input', function () {
-            saveButton.style.display = 'inline-block'; // Показать кнопку
+            saveButton.style.display = 'inline-block';
         });
         serialNumberField.addEventListener('input', function () {
-            saveButton.style.display = 'inline-block'; // Показать кнопку
+            saveButton.style.display = 'inline-block';
         });
     });
 </script>

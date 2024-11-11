@@ -13,9 +13,14 @@ namespace RepairWeb.Data.Configurations
             builder.Property(p => p.Rating).IsRequired();
             builder.Property(p => p.Comment).IsRequired(false);
 
-            builder.HasOne<Request>(review => review.Request)
-                .WithMany(r => r.Reviews)
-                .HasForeignKey(review => review.RequestId);
+            builder.HasOne(review => review.Request)
+                .WithOne(r => r.Review)
+                .HasForeignKey<Review>(r => r.RequestId);
+                
+
+            builder.HasOne(rev => rev.Executor)
+                .WithMany(e => e.Reviews)
+                .HasForeignKey(rev => rev.ExecutorId);
         }
     }
 }

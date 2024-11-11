@@ -12,7 +12,7 @@ namespace RepairWeb.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Reviews",
+                name: "Review",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -33,7 +33,7 @@ namespace RepairWeb.Data.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_RequestId",
-                table: "Reviews",
+                table: "Review",
                 column: "RequestId");
         }
 
@@ -41,7 +41,7 @@ namespace RepairWeb.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Reviews");
+                name: "Review");
         }
     }
 }

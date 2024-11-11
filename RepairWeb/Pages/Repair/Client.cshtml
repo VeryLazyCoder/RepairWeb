@@ -1,5 +1,6 @@
 ﻿@page
 
+@using RepairWeb.Data.Models
 @model RepairWeb.Pages.Repair.ClientModel
 @{
     @if (!Model.Requests.Any())
@@ -20,6 +21,17 @@
                                 <h5 class="card-title">Оборудование: @request.Equipment</h5>
                                 <p class="card-text"><strong>Дата создания:</strong> @request.RequestDate.ToString("dd.MM.yyyy")</p>
                                 <p class="card-text"><strong>Статус:</strong> @request.Status</p>
+                                @if (request is { Status: RequestStatus.Fulfill, Review: null })
+                                {
+                                    <div class="d-flex justify-content-center mt-4">
+                                        <a asp-page="/Client/Review" asp-route-id="@request.Id" 
+                                           class="btn btn-outline-success">Оставить отзыв</a>
+                                    </div>
+                                }
+                                @if (request.Review != null)
+                                {
+                                    <p class="card-text">Ваша оценка: @request.Review.Rating/10</p>
+                                }
                             </div>
                             <div class="card-footer d-flex justify-content-center mt-4">
                                 <a asp-page="/Client/View" asp-route-id="@request.Id" class="btn btn-primary">Детали</a>

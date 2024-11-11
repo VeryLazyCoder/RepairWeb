@@ -5,6 +5,7 @@ using Microsoft.Build.Framework;
 using RepairWeb.Authorization;
 using RepairWeb.Data.Entities;
 using RepairWeb.Data.Services;
+using RequestEntity = RepairWeb.Data.Entities.Request;
 
 namespace RepairWeb.Pages.Client
 {
@@ -13,13 +14,15 @@ namespace RepairWeb.Pages.Client
     {
         [BindProperty]
         public InputModel Input { get; set; }
+        public RequestEntity Request { get; private set; }
 
-        private Request _request;
-        private ReviewService _service;
+        private ReviewService _reviewService;
+        private RequestService _requestService;
 
-        public ReviewModel(ReviewService service)
+        public ReviewModel(ReviewService reviewService, RequestService requestService)
         {
-            _service = service;
+            _reviewService = reviewService;
+            _requestService = requestService;
         }
 
         public class InputModel
@@ -30,14 +33,23 @@ namespace RepairWeb.Pages.Client
             public int Rating { get; set; }
         }
 
-        public async Task OnGet(string id)
+        public async Task<IActionResult> OnGet(string id)
         {
             Input = new InputModel();
+
+            Request = await _requestService.GetRequest(id);
+            if (Request == null)
+                return NotFound();
+            if (Request.Review != null)
+                return Forbid();
+            return Page();
         }
 
-        public async Task OnPost()
+        public async Task<IActionResult> OnPost(string requestId)
         {
-
+            var request = await _requestService.GetRequest(requestId);
+            await _reviewService.CreateReview(request, Input.Rating, Input.Comment);
+            return RedirectToPage("/Repair/Client");
         }
     }
 }

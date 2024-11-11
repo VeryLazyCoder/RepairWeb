@@ -4,8 +4,9 @@
     ViewData["Title"] = "Оставить отзыв";
 }
 
-<h2>Оставить отзыв</h2>
-
+<h2 class="d-flex justify-content-center">Оставить отзыв по ремонту оборудования: <strong>@Model.Request.Equipment</strong></h2>
+<h5 class="card-text">Описание вашей проблемы:@Model.Request.ProblemDescription
+    Комментарий мастера: @Model.Request.ExecutorComment</h5>
 <form method="post">
     <div class="form-group">
         <label for="Rating">Оценка мастера</label>
@@ -16,6 +17,7 @@
             }
         </div>
         <input type="hidden" name="Rating" id="ratingInput" value="0">
+        <input type="hidden" name="requestId" value="@Model.Request.Id"/>
     </div>
 
     <div class="form-group mt-3">

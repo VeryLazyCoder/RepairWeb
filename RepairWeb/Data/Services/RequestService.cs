@@ -19,8 +19,9 @@ namespace RepairWeb.Data.Services
         public async Task<List<RequestSummaryModel>> GetRequestsSummary(ApplicationUser user)
         {
             return await _context.Requests.Where(r => r.ClientId == user.Id)
+                .Include(r => r.Review)
                 .OrderBy(r => r.RequestDate)
-                .Select(x => new RequestSummaryModel(x.Id, x.Equipment, x.RequestDate, x.Status))
+                .Select(x => new RequestSummaryModel(x.Id, x.Equipment, x.RequestDate, x.Status, x.Review))
                 .ToListAsync();
         }
 
@@ -42,7 +43,7 @@ namespace RepairWeb.Data.Services
             return request.Id.ToString();
         }
 
-        public async Task<ClientRequestViewModel> GetRequest(string id)
+        public async Task<ClientRequestViewModel> GetClientsRequestModel(string id)
         {
             var request = await _context.Requests.Where(x => x.Id.ToString() == id)
                     .SingleOrDefaultAsync();
@@ -62,6 +63,14 @@ namespace RepairWeb.Data.Services
                 RequestDate = request.RequestDate,
                 FulfillDate = request.FulfillDate
             };
+        }
+
+        public async Task<Request?> GetRequest(string id)
+        {
+            return await _context.Requests
+                .Where(r => r.Id.ToString() == id)
+                .Include(r => r.Executor)
+                .FirstOrDefaultAsync();
         }
 
         public async Task UpdateRequest(ClientRequestViewModel model, string id)

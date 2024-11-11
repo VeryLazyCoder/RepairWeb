@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RepairWeb.Data;
 
@@ -11,9 +12,11 @@ using RepairWeb.Data;
 namespace RepairWeb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241101114853_ReviewConnectionWithExecutor")]
+    partial class ReviewConnectionWithExecutor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -351,9 +354,6 @@ namespace RepairWeb.Data.Migrations
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ReviewId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("SerialNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -395,8 +395,7 @@ namespace RepairWeb.Data.Migrations
 
                     b.HasIndex("ExecutorId");
 
-                    b.HasIndex("RequestId")
-                        .IsUnique();
+                    b.HasIndex("RequestId");
 
                     b.ToTable("Reviews");
                 });
@@ -481,8 +480,8 @@ namespace RepairWeb.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("RepairWeb.Data.Entities.Request", "Request")
-                        .WithOne("Review")
-                        .HasForeignKey("RepairWeb.Data.Entities.Review", "RequestId")
+                        .WithMany("Reviews")
+                        .HasForeignKey("RequestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -500,9 +499,10 @@ namespace RepairWeb.Data.Migrations
 
             modelBuilder.Entity("RepairWeb.Data.Entities.Request", b =>
                 {
-                    b.Navigation("Report");
+                    b.Navigation("Report")
+                        .IsRequired();
 
-                    b.Navigation("Review");
+                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }
