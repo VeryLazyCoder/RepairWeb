@@ -12,7 +12,9 @@ namespace RepairWeb
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
+                                   throw new InvalidOperationException(
+                                       "Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -22,7 +24,7 @@ namespace RepairWeb
             builder.Services.AddScoped<ReportService>();
             builder.Services.AddScoped<NotificationService>();
             builder.Services.AddScoped<ReviewService>();
-            
+
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
                 {
@@ -66,11 +68,7 @@ namespace RepairWeb
             app.UseAuthorization();
 
             app.MapRazorPages();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             app.Run();
         }

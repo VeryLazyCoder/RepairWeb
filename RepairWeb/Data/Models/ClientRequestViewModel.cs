@@ -11,5 +11,8 @@
         public string SerialNumber { get; set; }
         public DateTime RequestDate { get; set; }
         public DateTime FulfillDate { get; set; }
+        public float ExecutorRating { get; set; }
+        public string ExecutorAvatarPath { get; set; }
+        public bool ExecutorAssigned { get; set; }
     }
 }

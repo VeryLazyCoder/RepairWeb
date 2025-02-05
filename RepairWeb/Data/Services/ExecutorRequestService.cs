@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using RepairWeb.Data.Entities;
 using RepairWeb.Data.Models;
 
@@ -7,15 +8,31 @@ namespace RepairWeb.Data.Services
     public class ExecutorRequestService
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ExecutorRequestService(ApplicationDbContext context)
+        public ExecutorRequestService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        public async Task<List<Executor>> GetExecutors()
+        public async Task<List<ExecutorViewModel>> GetExecutors()
         {
-            return await _context.Executors.ToListAsync();
+            var executors = await _context.Executors
+                .Select(e => new ExecutorViewModel()
+                {
+                    Name = e.Name,
+                    AverageRating = e.AverageRating,
+                    Id = e.Id,
+                })
+                .ToListAsync();
+
+            executors.ForEach(e =>
+            {
+                var imagePath = _userManager.FindByIdAsync(e.Id).Result.ProfileImageURL;
+                e.AvatarPath = string.IsNullOrEmpty(imagePath) ? "/images/defaultUser.png" : imagePath;
+            });
+            return executors;
         }
 
         public async Task<List<AdminRequestModel>> GetRequests()

@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RepairWeb.Authorization;
+using RepairWeb.Data;
 using RepairWeb.Data.Models;
 using RepairWeb.Data.Services;
 
@@ -12,6 +14,7 @@ namespace RepairWeb.Pages.Client
     {
         [BindProperty]
         public ClientRequestViewModel Request { get; set; }
+        public string ExecutorAvatarPath { get; private set; }
         private RequestService _requestService;
 
         public ViewModel(RequestService requestService)

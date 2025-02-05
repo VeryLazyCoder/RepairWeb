@@ -4,40 +4,80 @@
     ViewData["Title"] = "Оставить отзыв";
 }
 
-<h2 class="d-flex justify-content-center">Оставить отзыв по ремонту оборудования: <strong>@Model.Request.Equipment</strong></h2>
-<h5 class="card-text">Описание вашей проблемы:@Model.Request.ProblemDescription
-    Комментарий мастера: @Model.Request.ExecutorComment</h5>
-<form method="post">
-    <div class="form-group">
-        <label for="Rating">Оценка мастера</label>
-        <div class="rating" id="starRating">
-            @for (int i = 1; i <= 10; i++)
-            {
-                <i class="far fa-star" data-value="@i"></i>
-            }
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h2 class="text-center mb-0">Оставить отзыв</h2>
         </div>
-        <input type="hidden" name="Rating" id="ratingInput" value="0">
-        <input type="hidden" name="requestId" value="@Model.Request.Id"/>
-    </div>
+        <div class="card-body">
+            <h4 class="card-title text-center mb-4">
+                Оборудование: <strong>@Model.Request.Equipment</strong>
+            </h4>
+            <p class="card-text">
+                <strong>Описание проблемы:</strong> @Model.Request.ProblemDescription
+            </p>
+            <p class="card-text">
+                <strong>Комментарий мастера:</strong> @Model.Request.ExecutorComment
+            </p>
 
-    <div class="form-group mt-3">
-        <label for="ReviewText">Ваш отзыв</label>
-        <textarea class="form-control" id="ReviewText" name="Comment" rows="4" placeholder="Напишите свой отзыв">@Model.Input.Comment</textarea>
-    </div>
+            <form method="post">
+                <div class="form-group">
+                    <label for="Rating" class="form-label">Оценка мастера</label>
+                    <div class="rating" id="starRating">
+                        @for (int i = 1; i <= 10; i++)
+                        {
+                            <i class="far fa-star" data-value="@i"></i>
+                        }
+                    </div>
+                    <input type="hidden" name="Rating" id="ratingInput" value="0">
+                    <input type="hidden" name="requestId" value="@Model.Request.Id" />
+                </div>
 
-    <button type="submit" class="btn btn-primary mt-3">Отправить отзыв</button>
-</form>
+                <div class="form-group mt-4">
+                    <label for="ReviewText" class="form-label">Ваш отзыв</label>
+                    <textarea class="form-control" id="ReviewText" name="Comment" rows="4" placeholder="Напишите свой отзыв">@Model.Input.Comment</textarea>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success btn-lg">Отправить отзыв</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <style>
+    .container {
+        max-width: 700px;
+    }
+
     .rating {
         font-size: 2rem;
         color: #ffd700;
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
     }
 
         .rating i {
             cursor: pointer;
             margin-right: 5px;
+            transition: color 0.3s ease-in-out;
         }
+
+            .rating i:hover,
+            .rating i.fas {
+                color: #ff9800;
+            }
+
+    .card {
+        border-radius: 10px;
+    }
+
+    .card-header {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
 </style>
 
 <script>
@@ -61,6 +101,25 @@
                         s.classList.remove('fas');
                         s.classList.add('far'); // Пустая звезда
                     }
+                });
+            });
+
+            // Подсветка звёзд при наведении мыши
+            star.addEventListener('mouseover', function () {
+                const rating = this.getAttribute('data-value');
+                stars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.add('hover');
+                    } else {
+                        s.classList.remove('hover');
+                    }
+                });
+            });
+
+            // Сброс подсветки при уходе мыши
+            star.addEventListener('mouseout', function () {
+                stars.forEach(s => {
+                    s.classList.remove('hover');
                 });
             });
         });

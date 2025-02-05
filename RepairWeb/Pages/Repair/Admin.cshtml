@@ -14,18 +14,35 @@
                             <p class="card-text"><strong>Дата создания:</strong> @request.RequestDate.ToString("dd.MM.yyyy")</p>
                             <p class="card-text"><strong>Клиент жалуется на:</strong> @request.ProblemDescription</p>
 
-                            <form id="assignForm" method="post" asp-page-handler="Assign" onsubmit="return validateForm()">
-                                <label for="executor">Выберите исполнителя:</label>
-                                <select id="executor" name="ExecutorId" class="form-control">
-                                    <option value="">-- Выберите исполнителя --</option>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="executorDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    -- Выберите исполнителя --
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="executorDropdown" style="max-height: 300px; overflow-y: auto;">
                                     @foreach (var executor in Model.Executors)
                                     {
-                                        <option value="@executor.Id">@executor.Name</option>
+                                        <li class="p-2">
+                                            <div class="d-flex align-items-center">
+                                                <img src="@executor.AvatarPath" alt="Profile Image" class="rounded-circle me-2" style="width: 40px; height: 40px;" />
+                                                <div>
+                                                    <strong>@executor.Name</strong><br />
+                                                    <span class="text-muted">
+                                                        @executor.AverageRating.ToString("F2") <i class="fas fa-star text-warning"></i>
+                                                    </span>
+                                                </div>
+                                                <form method="post" asp-page-handler="Assign" class="ms-auto">
+                                                    <input type="hidden" name="executorId" value="@executor.Id" />
+                                                    <input type="hidden" name="requestId" value="@request.RequestId" />
+                                                    <button type="submit" class="btn btn-sm btn-primary">
+                                                        Назначить исполнителя
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </li>
                                     }
-                                </select>
-                                <input type="hidden" name="RequestId" value="@request.RequestId" />
-                                <button type="submit" class="btn btn-primary mt-2">Назначить</button>
-                            </form>
+                                </ul>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -35,42 +52,4 @@
     <div class="d-flex justify-content-center mt-3">
         <a asp-page="/Admin/Reports" class="btn btn-primary mt-2">Просмотреть отчёты</a>
     </div>
-    <h2 class="text-center mt-5">Список изъявивших желание стать менеджером</h2>
-
-    <div class="container">
-        <div class="row">
-            @foreach (var candidate in Model.Candidates)
-            {
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">@candidate.FullName (@candidate.UserName)</h5>
-
-                            <form method="post">
-                                <input type="hidden" name="CandidateId" value="@candidate.Id" />
-                                <div class="d-flex justify-content-between">
-                                    <button type="submit" asp-page-handler="Promote" class="btn btn-success">Назначить менеджером</button>
-                                    <button type="submit" asp-page-handler="Reject" class="btn btn-danger">Отказать</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
 }
-
-
-
-<script>
-    function validateForm() {
-        var executorSelect = document.getElementById("executor");
-
-        if (executorSelect.value === "") {
-            alert("Пожалуйста, выберите исполнителя.");
-            return false;
-        }
-        return true;
-    }
-</script>

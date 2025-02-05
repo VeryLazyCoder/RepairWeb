@@ -1,13 +1,12 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RepairWeb.Authorization;
 using RepairWeb.Data;
-using RepairWeb.Data.Entities;
 using RepairWeb.Data.Models;
 using RepairWeb.Data.Services;
+using System.Security.Claims;
 
 namespace RepairWeb.Pages.Repair
 {
@@ -18,7 +17,8 @@ namespace RepairWeb.Pages.Repair
         private ExecutorRequestService _service;
         
         public List<ApplicationUser> Candidates { get;}
-        public List<Data.Entities.Executor> Executors { get; set; }
+        public List<ExecutorViewModel> Executors { get; set; }
+        [BindProperty]
         public List<AdminRequestModel> Requests { get; set; }
         public AdminModel(UserManager<ApplicationUser> userManager, ExecutorRequestService service)
         {

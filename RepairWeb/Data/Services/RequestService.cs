@@ -46,12 +46,12 @@ namespace RepairWeb.Data.Services
         public async Task<ClientRequestViewModel> GetClientsRequestModel(string id)
         {
             var request = await _context.Requests.Where(x => x.Id.ToString() == id)
+                .Include(r => r.Executor)
                     .SingleOrDefaultAsync();
             if (request == default)
                 return null;
-            var executorName = request.ExecutorId == default ? "мастер ещё не назначен" :
-                    _userManager.FindByIdAsync(request.ExecutorId.ToString()).Result.FullName;
-            return new ClientRequestViewModel
+            
+            var result = new ClientRequestViewModel
             {
                 SerialNumber = request.SerialNumber,
                 Status = request.Status,
@@ -59,10 +59,23 @@ namespace RepairWeb.Data.Services
                 ProblemDescription = request.ProblemDescription,
                 RequestId = id,
                 ExecutorComment = request.ExecutorComment ?? "мастер не оставил никаких комментариев",
-                ExecutorName = executorName,
+                ExecutorName = "мастер ещё не назначен",
                 RequestDate = request.RequestDate,
-                FulfillDate = request.FulfillDate
+                FulfillDate = request.FulfillDate,
+                ExecutorAvatarPath = "/images/defaultUser.png",
             };
+
+            if (request.ExecutorId != null)
+            {
+                var executorAvatarPath = (await _userManager.FindByIdAsync(request.ExecutorId))
+                    ?.ProfileImageURL;
+                result.ExecutorAvatarPath = string.IsNullOrEmpty(executorAvatarPath)
+                    ? "/images/defaultUser.png" : executorAvatarPath;
+                result.ExecutorRating = request.Executor.AverageRating;
+                result.ExecutorName = request.Executor.Name;
+                result.ExecutorAssigned = true;
+            }
+            return result;
         }
 
         public async Task<Request?> GetRequest(string id)
